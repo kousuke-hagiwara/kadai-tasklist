@@ -17,13 +17,13 @@ class TasksController < ApplicationController
 
   def create
       @task = Task.new(task_params)
-      
+      @task = current_user.tasks.build(task_params)
 
     if @task.save
       flash[:success] = 'Task が正常に投稿されました'
       redirect_to @task
     else
-      
+      @tasks = current_user.tasks
       flash.now[:danger] = 'Task が投稿されませんでした'
       render :new
     end
@@ -54,8 +54,6 @@ class TasksController < ApplicationController
   
   
   private
-  
- 
   
   def task_params
     params.require(:task).permit(:content, :status)
